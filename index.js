@@ -3,8 +3,19 @@
 import express, { query } from "express";
 import cors from "cors";
 import router from "./router/index.js";
+// import mongoose from "mongoose";
+import mongoose from "./db/index.js";
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
+
+//db
+var db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", function () {
+  console.log("db connected");
+});
+
+//db
 
 // const users = [
 //   {
@@ -29,14 +40,14 @@ app.use(express.json());
 app.use(cors());
 
 //middlware
-app.use("/", (req, res, next) => {
-  console.log("request agai......>", req.query);
-  if (req?.query?.apikey === "123") {
-    next();
-  } else {
-    res.status(401).send({ messgae: "not allowed" });
-  }
-});
+// app.use("/", (req, res, next) => {
+//   console.log("request agai......>", req.query);
+//   if (req?.query?.apikey === "123") {
+//     next();
+//   } else {
+//     res.status(401).send({ messgae: "not allowed" });
+//   }
+// });
 app.use("/api", router);
 // axios
 //   .post("http://localhost:8000/user", {
